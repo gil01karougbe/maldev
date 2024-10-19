@@ -1,0 +1,20 @@
+Exercise: Student Database
+
+Write a C program to create a student database using structures. Each student record should contain the following information:
+
+Student ID (an integer)
+Name (a string)
+Age (an integer)
+GPA (a float)
+Your program should allow the user to perform the following operations:
+
+Add a new student record.
+Display all student records.
+Search for a student record by ID.
+Update a student record.
+Delete a student record.
+Exit the program.
+Make sure to use dynamic memory allocation for storing student records. You can use an array of structures or linked lists, whichever you're more comfortable with.
+
+
+______________________________________Made By ChatGPT____________________________________

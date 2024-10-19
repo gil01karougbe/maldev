@@ -1,0 +1,11 @@
+VirtualAlloc
+RtlCopyMemory
+CreateThread
+WaitForSingleObject
+CloseHandle
+VirtualFree
+OpenProcess
+VirtualAllocEx
+WriteProcessMemory
+CreateRemoteThread
+VirtualFreeEx

@@ -1,0 +1,19 @@
+Exercise: Employee Management System
+
+1-Employee ID: A unique identifier for each employee.
+2-Name: The full name of the employee.
+3-Department: The department in which the employee works.
+4-Salary: The salary of the employee.
+
+Create an Employee Management System in C using structures and file handling. The program should have the following functionalities:
+
+Add new employee details (ID, name, department, salary) and store them in a file.
+Display all employee details stored in the file.
+Search for an employee by ID.
+Update employee details (name, department, salary) based on the ID.
+Delete an employee record based on the ID.
+Calculate and display statistics such as the total number of employees, the average salary, the highest salary, and the lowest salary.
+Exit the program.
+You may also implement error handling, input validation, and user-friendly menus to enhance the robustness and usability of your program.
+
+This exercise will help you practice not only working with structures but also file handling operations, such as reading from and writing to files, and performing data manipulation tasks.
