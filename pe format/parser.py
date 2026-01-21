@@ -1,7 +1,7 @@
 from tabulate import tabulate
 import pefile
 
-pe =  pefile.PE("C:\\Users\\essog\\OneDrive\\Bureau\\WIN-MALWARE-DEV\\inject.exe")
+pe =  pefile.PE("C:\\Users\\essog\\OneDrive\\Bureau\\maldev\\inject.exe")
 
 ###IMAGE_DOS_HEADER
 print("[+] DOS HEADER:")

@@ -3,6 +3,7 @@ import json
 
 #pe =  pefile.PE("C:\\Windows\\System32\\user32.dll")
 #pe =  pefile.PE("C:\\Windows\\System32\\kernelbase.dll")
+
 pe =  pefile.PE("C:\\Windows\\System32\\kernel32.dll")
 exports_list = []
 for exp in pe.DIRECTORY_ENTRY_EXPORT.symbols:

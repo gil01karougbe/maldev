@@ -1,5 +1,5 @@
 /*
-    T6: Process Hallowin a.k.a process replacement and rumpe
+    T6: Process Hallowing a.k.a process replacement and rumpe
     Payload Enc: None
     Payload Obs: None
 */

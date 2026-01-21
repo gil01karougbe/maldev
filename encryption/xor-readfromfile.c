@@ -1,6 +1,6 @@
 /*
     Enc: xor
-    ShellCode: read from file
+    ShellCode: Read from file
     Desc: 
 */
 #include <windows.h>
@@ -17,7 +17,7 @@ char line[200];
 int main(){
     //read shellcode 
     FILE *file_pointer;
-    char file_name[] = "C:\\Users\\essog\\OneDrive\\Bureau\\WIN-MALWARE-DEV\\shellcode\\stageless\\x64\\calc.txt";
+    char file_name[] = "C:\\Users\\essog\\OneDrive\\Bureau\\maldev\\shellcode\\stageless\\x64\\calc.txt";
     file_pointer = fopen(file_name, "r");
     if (file_pointer == NULL) {
         printf("Error opening the file.\n");

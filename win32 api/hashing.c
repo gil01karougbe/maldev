@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-unsigned long hash_djb2(unsigned char *str){
+unsigned long hash_algo(unsigned char *str){
     unsigned long hash = 5381;
     int c;
     while (c = *str++){
@@ -11,8 +11,8 @@ unsigned long hash_djb2(unsigned char *str){
 
 int main(){
     char hash_str[100];
-    char func[] = "OpenProcess";
-    unsigned long hash = hash_djb2(func);
+    char func[] = "CreateRemoteThread";
+    unsigned long hash = hash_algo(func);
     sprintf(hash_str, "%lu", hash);
     printf("Hash as string: %s\n", hash_str);
     return 0;

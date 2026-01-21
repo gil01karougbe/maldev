@@ -1,13 +1,14 @@
 /*
-    Enc: xor
+    Enc: rc4
     ShellCode: X64 calc
-    Desc: 
+    Desc:
 */
 
 #include <windows.h>
 #include <stdio.h>
+#include <winternl.h>
 
-const unsigned char shellcode[] = {
+unsigned char plaintext[] = {
 0xfc, 0x48, 0x83, 0xe4, 0xf0, 0xe8, 0xc0, 0x00, 0x00, 0x00, 0x41, 0x51, 0x41, 0x50,
 0x52, 0x51, 0x56, 0x48, 0x31, 0xd2, 0x65, 0x48, 0x8b, 0x52, 0x60, 0x48, 0x8b, 0x52,
 0x18, 0x48, 0x8b, 0x52, 0x20, 0x48, 0x8b, 0x72, 0x50, 0x48, 0x0f, 0xb7, 0x4a, 0x4a,
@@ -28,26 +29,49 @@ const unsigned char shellcode[] = {
 0x9d, 0xff, 0xd5, 0x48, 0x83, 0xc4, 0x28, 0x3c, 0x06, 0x7c, 0x0a, 0x80, 0xfb, 0xe0,
 0x75, 0x05, 0xbb, 0x47, 0x13, 0x72, 0x6f, 0x6a, 0x00, 0x59, 0x41, 0x89, 0xda, 0xff,
 0xd5, 0x63, 0x61, 0x6c, 0x63, 0x2e, 0x65, 0x78, 0x65, 0x00 };
+unsigned char key[] = "Yere is oUr Key";
 
-VOID XorByOneKey(IN PBYTE pShellcode, IN SIZE_T sShellcodeSize, IN BYTE bKey) {
-for (size_t i = 0; i < sShellcodeSize; i++){
-	pShellcode[i] = pShellcode[i] ^ bKey;
-}
-}
+typedef struct _USTRING {
+	DWORD	Length;         // Size of the data to encrypt/decrypt
+	DWORD	MaximumLength;  // Max size of the data to encrypt/decrypt, although often its the same as Length (USTRING.Length = USTRING.MaximumLength = X)
+	PVOID	Buffer;         // The base address of the data to encrypt/decrypt
+} USTRING;
 
-VOID XorByiKeys(IN PBYTE pShellcode, IN SIZE_T sShellcodeSize, IN BYTE bKey) {
-	for (size_t i = 0; i < sShellcodeSize; i++) {
-		pShellcode[i] = pShellcode[i] ^ (bKey + i);
+/*
+ NTSTATUS SystemFunction032(
+  struct ustring*       data,
+  const struct ustring* key
+ )
+*/
+typedef NTSTATUS(NTAPI* fnSystemFunction032)(
+	USTRING* Data,  
+	USTRING* Key 
+);
+
+BOOL Rc4EncryptionViaSystemFunc032(IN PBYTE pRc4Key, IN PBYTE pPayloadData, IN DWORD dwRc4KeySize, IN DWORD sPayloadSize) {
+
+	NTSTATUS STATUS	= 0;
+	
+	USTRING Data = { 
+		.Buffer         = pPayloadData,
+		.Length         = sPayloadSize,
+		.MaximumLength  = sPayloadSize
+	};
+
+	USTRING	Key = {
+		.Buffer         = pRc4Key,
+		.Length         = dwRc4KeySize,
+		.MaximumLength  = dwRc4KeySize
+	};
+
+	fnSystemFunction032 SystemFunction032 = (fnSystemFunction032)GetProcAddress(LoadLibraryA("Advapi32"), "SystemFunction032");
+
+	if ((STATUS = SystemFunction032(&Data, &Key)) != 0x0) {
+		printf("[!] SystemFunction032 FAILED With Error: 0x%0.8X \n", STATUS);
+		return FALSE;
 	}
-}
 
-VOID XorByInputKey(IN PBYTE pShellcode, IN SIZE_T sShellcodeSize, IN PBYTE bKey, IN SIZE_T sKeySize) {
-	for (size_t i = 0, j = 0; i < sShellcodeSize; i++, j++) {
-		if (j > sKeySize){
-			j = 0;
-		}
-		pShellcode[i] = pShellcode[i] ^ bKey[j];
-	}
+	return TRUE;
 }
 
 void printhexdata(unsigned char *data, size_t size) {
@@ -61,10 +85,15 @@ void printhexdata(unsigned char *data, size_t size) {
     printf("}\n");
 }
 
+
 int main(){
-    XorByiKeys(shellcode, sizeof(shellcode), 0x65);
-    printhexdata(shellcode, sizeof(shellcode));
-    XorByiKeys(shellcode, sizeof(shellcode), 0x65);
-    printhexdata(shellcode, sizeof(shellcode));
-    return EXIT_SUCCESS;
+	BOOL status1 = Rc4EncryptionViaSystemFunc032(key, plaintext, sizeof(key), sizeof(plaintext));
+	if (status1 == TRUE){
+		printhexdata(plaintext, sizeof(plaintext));
+	}
+	BOOL status2 = Rc4EncryptionViaSystemFunc032(key, plaintext, sizeof(key), sizeof(plaintext));
+	if (status2 == TRUE){
+		printhexdata(plaintext, sizeof(plaintext));
+	}
+	return EXIT_SUCCESS;
 }
